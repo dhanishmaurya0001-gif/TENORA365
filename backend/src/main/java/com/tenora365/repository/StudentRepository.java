@@ -1,0 +1,1 @@
+package com.tenora365.repository;import com.tenora365.entity.Student;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface StudentRepository extends JpaRepository<Student,Long>{List<Student> findBySchoolIdOrderByIdDesc(Long id);Optional<Student> findByIdAndSchoolId(Long id,Long schoolId);long countBySchoolId(Long id);}

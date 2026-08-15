@@ -1,0 +1,1 @@
+package com.tenora365.repository;import com.tenora365.entity.PaymentOrder;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface PaymentOrderRepository extends JpaRepository<PaymentOrder,Long>{Optional<PaymentOrder> findByOrderNo(String no);}

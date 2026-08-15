@@ -1,0 +1,1 @@
+package com.tenora365.repository;import com.tenora365.entity.Subscription;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface SubscriptionRepository extends JpaRepository<Subscription,Long>{List<Subscription> findBySchoolIdOrderByIdDesc(Long id);}

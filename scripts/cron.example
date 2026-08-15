@@ -1,0 +1,2 @@
+# Daily at 02:15. Run from the TENORA365 directory.
+15 2 * * * cd /opt/tenora365 && ./scripts/backup.sh >> /var/log/tenora365-backup.log 2>&1

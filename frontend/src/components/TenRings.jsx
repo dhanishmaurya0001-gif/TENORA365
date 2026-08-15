@@ -1,0 +1,1 @@
+import {motion} from 'framer-motion';export default function TenRings({small=false}){return <div className={small?'rings small':'rings'}>{Array.from({length:10}).map((_,i)=><motion.span key={i} animate={{rotate:[0,360],scale:[1,1.05,1]}} transition={{duration:5+i*.2,repeat:Infinity,ease:'linear'}} style={{transform:`rotate(${i*36}deg) translateY(-${small?18:42}px)`}}/> )}</div>}

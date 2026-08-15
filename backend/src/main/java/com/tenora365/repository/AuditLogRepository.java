@@ -1,0 +1,1 @@
+package com.tenora365.repository;import com.tenora365.entity.AuditLog;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface AuditLogRepository extends JpaRepository<AuditLog,Long>{List<AuditLog> findTop100BySchoolIdOrderByCreatedAtDesc(Long id);}

@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: TENORA365
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/tenora365?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:Dhanish@123}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:10MB}
+      max-request-size: ${MAX_REQUEST_SIZE:20MB}
+
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+
+  health:
+    mail:
+      enabled: false
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:TENORA365-development-secret-2026-CHANGE-THIS-TO-A-VERY-LONG-RANDOM-SECRET-KEY-123456789}
+    access-minutes: ${JWT_ACCESS_MINUTES:15}
+    refresh-days: ${JWT_REFRESH_DAYS:30}
+
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173}
+
+  storage-dir: ${STORAGE_DIR:./storage}
+
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+
+  payments:
+    provider: ${PAYMENT_PROVIDER:mock}
+
+  notifications:
+    mode: ${NOTIFICATION_MODE:log}
+
+  otp:
+    minutes: ${OTP_MINUTES:10}

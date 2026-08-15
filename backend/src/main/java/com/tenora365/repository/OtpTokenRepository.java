@@ -1,0 +1,1 @@
+package com.tenora365.repository;import com.tenora365.entity.OtpToken;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;public interface OtpTokenRepository extends JpaRepository<OtpToken,Long>{Optional<OtpToken> findTopByUserIdAndUsedFalseOrderByCreatedAtDesc(Long userId);}

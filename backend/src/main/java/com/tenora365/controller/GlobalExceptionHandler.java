@@ -1,0 +1,2 @@
+package com.tenora365.controller;import org.springframework.http.*;import org.springframework.web.bind.annotation.*;import java.time.*;import java.util.*;
+@RestControllerAdvice public class GlobalExceptionHandler{@ExceptionHandler(Exception.class)ResponseEntity<?> handle(Exception e){return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("timestamp",Instant.now(),"error",e.getMessage()==null?"Request failed":e.getMessage()));}}

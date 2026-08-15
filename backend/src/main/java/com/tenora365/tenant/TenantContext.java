@@ -1,0 +1,1 @@
+package com.tenora365.tenant;public final class TenantContext{private static final ThreadLocal<Long>C=new ThreadLocal<>();public static void set(Long id){C.set(id);}public static Long get(){return C.get();}public static void clear(){C.remove();}}
