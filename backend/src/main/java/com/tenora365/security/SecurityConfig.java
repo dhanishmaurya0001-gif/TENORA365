@@ -95,8 +95,11 @@ public class SecurityConfig {
                         .permitAll()
 
                         // Authentication
+                        .requestMatchers("/", "/index.html", "/assets/**", "/favicon.ico")
+                        .permitAll()
+
                         .requestMatchers(
-                                "/api/auth/**"
+                                "/api/auth/login", "/api/auth/refresh", "/api/auth/request-otp", "/api/auth/reset-password"
                         )
                         .permitAll()
 

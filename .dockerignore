@@ -1,0 +1,12 @@
+.git
+**/target
+**/node_modules
+**/dist
+**/*.log
+.env
+.env.*
+!**/.env.example
+storage
+backups
+
+backend/src/main/resources/static/

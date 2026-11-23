@@ -1,108 +1,79 @@
-# TENORA365 — Production SaaS Package
+# TENORA365 - Multi-school ERP Portfolio Demo
 
-TENORA365 is a multi-tenant school management SaaS foundation built with Java 21/Spring Boot, MySQL 8.4, Flyway, JWT/refresh-token architecture and React/Vite. The package is designed so a VPS deployment can be brought online with Docker Compose and automatic HTTPS through Caddy.
+A Java 21 / Spring Boot 3.5.4 and React/Vite school-administration project. The application demonstrates school tenants, JWT authentication, student management, teacher records, fees, PDF receipts and operational record workspaces.
 
-## What is included
+## Interactive free-hosting demo
 
-- Multi-school tenant isolation using school-scoped repositories and JWT tenant claims
-- Super Admin school onboarding
-- School Admin workspace
-- Student management
-- Teacher management
-- Attendance module workspace
-- Exams & report-card workspace
-- Timetable workspace
-- Parent portal workspace
-- Student portal workspace
-- Payroll workspace
-- Library workspace
-- Transport workspace
-- Notifications workspace
-- Documents/file upload with tenant directories and unsafe-extension blocking
-- Fees + PDF fee receipt
-- Subscription/billing records
-- Payment-order data model ready for gateway adapter
-- OTP/refresh-token entities and secure password hashing foundation
-- Audit logs
-- Flyway migrations
-- Automated Spring context test
-- MySQL backup and restore scripts
-- Docker production build
-- Automatic HTTPS via Caddy
-- Ten Rings-inspired animated frontend
+The root `Dockerfile` builds the React frontend and Spring Boot API into one same-origin application. `render.yaml` prepares a Render **Free** service named `dhanish-tenora365-demo`; its readiness check is `/actuator/health/readiness`, which waits for initial demonstration data to be ready. The final hosted URL is shown in the repository Website field after deployment.
 
-## Important deployment reality
+Choose **Open demo school**, **Open second school**, or **Explore platform administrator** on the login page. These buttons perform real API authentication against deliberately public fictional accounts:
 
-No software package can contain your real domain, DNS credentials, payment gateway keys, WhatsApp/SMS provider account, SMTP account, or cloud-storage account. Those are secrets belonging to your business. The code is provider-ready, and `mock`/`log` modes are safe defaults for initial deployment.
+| Account | Username |
+|---|---|
+| Pragati school administrator | `admin@demo.tenora365.com` |
+| Riverbank school administrator | `admin@riverbank.example` |
+| Platform administrator | `superadmin` |
 
-For a real paid launch, set your provider credentials and switch the provider modes before accepting money or sending regulated messages.
+Public demo password: **`Demo@School2026!`**.
 
-## VPS deployment
+The `demo` Spring profile uses H2 in memory with two schools, six fictional students, two teachers, five fee entries and ten sample operational records. It does not need an external database account. Records are shared among visitors and reset on host restart, sleep or redeployment. Do not enter personal information. No real payments or external notifications are sent.
 
-Recommended: Ubuntu 24.04/22.04 VPS with at least 2 vCPU, 4 GB RAM, 50 GB SSD for a small first deployment.
+## Implemented demonstration
 
-1. Point your domain A record to the VPS public IP.
-2. Install Docker Engine + Compose plugin.
-3. Copy this folder to the VPS.
-4. `cp .env.example .env`
-5. Set `DOMAIN=app.yourdomain.com` and all strong passwords/secrets in `.env`.
-6. Run `docker compose -f docker-compose.production.yml up -d --build`
-7. Open `https://app.yourdomain.com`.
+- JWT login and tenant-scoped access, with a separate platform administrator school list/onboarding API.
+- Student create/list/update/delete API and student entry/search/delete UI.
+- Structured teacher records and fee entries.
+- School dashboard totals based on real database records.
+- Fee PDF receipts.
+- Tenant-scoped operational JSON records and student-operation audit records.
+- Separate school data, so the two demonstration accounts can be used to check isolation.
 
-Caddy automatically requests and renews the TLS certificate when DNS points to the VPS and ports 80/443 are reachable.
+Attendance, examinations, timetable, payroll, library, transport, parent/student portals, notification records and document metadata currently provide **generic JSON record workspaces**. They are prototypes rather than complete specialized workflows. Subscription and payment-order records are data-model demonstrations; a real payment-gateway adapter is not implemented. Settings and provider placeholders do not establish production readiness.
 
-## First login
+## Local demo run
 
-The startup seeder creates:
+Use Java 21 and Maven to start the backend with the `demo` profile:
 
-- Super Admin: `superadmin`
-- Demo School Admin: `admin@demo.tenora365.com`
+```powershell
+mvn -f backend/pom.xml spring-boot:run -Dspring-boot.run.profiles=demo
+```
 
-Passwords are taken from `.env` (`SUPERADMIN_PASSWORD` and `DEMO_ADMIN_PASSWORD`). Change them before giving access to customers.
+In a second terminal, use Node.js 22.12 or later:
 
-## Backups
+```powershell
+npm --prefix frontend ci
+$env:VITE_DEMO_MODE='true'
+npm --prefix frontend run dev
+```
 
-Run daily from cron:
+Open `http://localhost:5173`. Vite proxies `/api` to the backend on port 8080. The root Dockerfile serves both frontend and API on the same public origin.
 
-`./scripts/backup.sh`
+For a combined Docker demonstration:
 
-Restore:
+```bash
+docker build -t tenora365-demo .
+docker run --rm -p 8080:8080 tenora365-demo
+```
 
-`./scripts/restore.sh backups/your-file.sql.gz`
+Open `http://localhost:8080`. The H2 demonstration database is intentionally resettable.
 
-Keep encrypted off-server copies. A backup is not considered production-safe until a restore has been tested.
+## Existing MySQL deployment path
 
-## Provider integrations
+When the `demo` profile is absent, the original MySQL/Flyway configuration is used. The separate backend/frontend Compose deployment remains available in `docker-compose.yml` and `docker-compose.production.yml`.
 
-### Payments
+For that path, copy `.env.example` to a local `.env` and provide your own database passwords, JWT secret and administrator passwords. Follow the deployment scripts and review `docs/COMMERCIAL_CHECKLIST.md` before planning a non-demo deployment. Do not reuse the public demonstration password or publish local secrets.
 
-The data model has `payment_orders` and subscription records. Set `PAYMENT_PROVIDER` to your chosen adapter when you implement/enable a real provider. Never mark a payment paid from a browser redirect alone; verify the provider webhook/signature on the server and then update the database.
+The original architecture is Caddy or Nginx, React frontend, Spring Boot API and MySQL, with tenant files in application storage. Database migrations remain in `backend/src/main/resources/db/migration`. The demo profile disables those MySQL migrations and creates a separate in-memory schema.
 
-### Email/SMS/WhatsApp
+Provider account setup, real gateway verification, delivery testing, persistent storage, off-server backups and a tested restore procedure require separate implementation/configuration. The free portfolio container does not provide durable school records.
 
-Email SMTP variables are present. SMS/WhatsApp should be connected through your selected provider's API/webhook credentials and stored only as VPS environment secrets.
+## Verification
 
-### Object storage
+- React production build passed.
+- Maven package and the Spring Boot context test passed with the `demo` profile.
+- Local bundled-JAR HTTP checks passed for three account logins, school lists, tenant isolation, protected API access, student CRUD, cross-tenant update denial, teacher/fee records, PDF receipt generation, ten operational workspaces, generic-record CRUD, audit records, disabled external email and invalid-token rejection.
+- H2 JSON records were checked to round-trip as JSON objects rather than double-encoded strings.
 
-The included upload service stores tenant files under `/app/storage/<schoolId>`. For large commercial scale, mount persistent storage or replace the storage service with S3-compatible object storage. Do not put private student documents in a public bucket.
+These are selected functional checks. They are not a full security audit, a certification of every feature, or evidence of real payment/notification delivery. The local Docker engine was not used for this verification; the hosting provider must still build and run its deployment image.
 
-## Architecture
-
-Internet → Caddy HTTPS → React/Nginx → Spring Boot API → JWT/Tenant Context → MySQL
-
-Files are stored in a persistent tenant-scoped volume. Flyway owns schema migrations.
-
-## Security checklist before selling
-
-- Use unique 64+ character `JWT_SECRET`.
-- Use unique MySQL/root passwords.
-- Change demo/admin passwords.
-- Restrict VPS SSH and enable firewall.
-- Keep Docker/OS updated.
-- Configure real payment webhooks and signature verification.
-- Configure real notification providers and consent/opt-out rules.
-- Configure off-server encrypted backups.
-- Test tenant isolation with two schools.
-- Test restore before launch.
-- Do not expose MySQL port to the internet.
-- Use HTTPS only.
+Prepared for portfolio demonstration by Dhanish Kumar Maurya.

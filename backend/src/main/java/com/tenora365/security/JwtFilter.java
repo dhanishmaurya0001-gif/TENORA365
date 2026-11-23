@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return true;
         }
 
-        return uri.startsWith("/api/auth/")
+        return (uri.startsWith("/api/auth/") && !uri.equals("/api/auth/me"))
                 || uri.equals("/actuator/health")
                 || uri.startsWith("/actuator/health/");
     }
@@ -57,7 +57,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 String token =
                         authorization.substring(7);
 
-                Claims claims = jwtService.parse(token);
+                Claims claims;
+                try {
+                    claims = jwtService.parse(token);
+                } catch (io.jsonwebtoken.JwtException | IllegalArgumentException invalidToken) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\":\"Session expired. Please sign in again.\"}");
+                    return;
+                }
 
                 Long schoolId =
                         claims.get("schoolId", Long.class);

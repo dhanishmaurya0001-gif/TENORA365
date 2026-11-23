@@ -1,1 +1,1 @@
-package com.tenora365;import org.junit.jupiter.api.Test;import org.springframework.boot.test.context.SpringBootTest;@SpringBootTest class Tenora365ApplicationTests{@Test void contextLoads(){}}
+package com.tenora365;import org.junit.jupiter.api.Test;import org.springframework.boot.test.context.SpringBootTest;@org.springframework.test.context.ActiveProfiles("demo") @SpringBootTest class Tenora365ApplicationTests{@Test void contextLoads(){}}
