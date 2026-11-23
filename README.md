@@ -4,7 +4,9 @@ A Java 21 / Spring Boot 3.5.4 and React/Vite school-administration project. The 
 
 ## Interactive free-hosting demo
 
-The root `Dockerfile` builds the React frontend and Spring Boot API into one same-origin application. `render.yaml` prepares a Render **Free** service named `dhanish-tenora365-demo`; its readiness check is `/actuator/health/readiness`, which waits for initial demonstration data to be ready. The final hosted URL is shown in the repository Website field after deployment.
+**[Open the live interactive demo](https://dhanish-tenora365-demo.onrender.com/)**
+
+The demo is deployed on Render **Free**. The root `Dockerfile` builds the React frontend and Spring Boot API into one same-origin application. The readiness check `/actuator/health/readiness` waits for initial demonstration data to be ready. After idle time, the free service may need time to wake before the login page opens.
 
 Choose **Open demo school**, **Open second school**, or **Explore platform administrator** on the login page. These buttons perform real API authentication against deliberately public fictional accounts:
 
@@ -68,6 +70,8 @@ The original architecture is Caddy or Nginx, React frontend, Spring Boot API and
 Provider account setup, real gateway verification, delivery testing, persistent storage, off-server backups and a tested restore procedure require separate implementation/configuration. The free portfolio container does not provide durable school records.
 
 ## Verification
+
+Hosted verification on **23 November 2026** passed **32 HTTP integration checks**, including three account logins, tenant isolation, student CRUD, cross-tenant update rejection, typed teacher/fee records, fee PDF generation, operational workspaces and disabled external email. JSON object round-trip and removal of temporary test records were also verified. These are API and served-asset checks, not an exhaustive browser or security audit.
 
 - React production build passed.
 - Maven package and the Spring Boot context test passed with the `demo` profile.
